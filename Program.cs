@@ -33,7 +33,14 @@ try
             string label = args[1];
             string plaintext = string.Join(' ', args.Skip(2));
             var (nonce, tag, ct) = crypto.Encrypt(label, plaintext);
-            long newId = db.Insert(label, nonce, tag, ct);
+
+            // Pack nonce(12) || tag(16) || ciphertext into one blob
+            byte[] blob = new byte[nonce.Length + tag.Length + ct.Length];
+            Buffer.BlockCopy(nonce, 0, blob, 0, nonce.Length);
+            Buffer.BlockCopy(tag,   0, blob, nonce.Length, tag.Length);
+            Buffer.BlockCopy(ct,    0, blob, nonce.Length + tag.Length, ct.Length);
+
+            long newId = db.Insert(label, blob);
             Console.WriteLine($"Inserted id={newId}");
             break;
 
@@ -51,7 +58,21 @@ try
             }
             try
             {
-                string recovered = crypto.Decrypt(rec.Value.label, rec.Value.nonce, rec.Value.tag, rec.Value.ciphertext);
+                byte[] blob2 = rec.Value.encryptedBlob;
+                if (blob2.Length < 12 + 16)
+                {
+                    Console.WriteLine("Corrupted record.");
+                    return;
+                }
+                byte[] nonce2 = new byte[12];
+                byte[] tag2   = new byte[16];
+                byte[] ct2    = new byte[blob2.Length - 12 - 16];
+
+                Buffer.BlockCopy(blob2, 0, nonce2, 0, 12);
+                Buffer.BlockCopy(blob2, 12, tag2, 0, 16);
+                Buffer.BlockCopy(blob2, 12 + 16, ct2, 0, ct2.Length);
+
+                string recovered = crypto.Decrypt(rec.Value.label, nonce2, tag2, ct2);
                 Console.WriteLine($"Label: {rec.Value.label}\nPlaintext: {recovered}");
             }
             catch (Exception ex)
@@ -92,7 +113,7 @@ catch (Exception ex)
 static void PrintHelp()
 {
     Console.WriteLine(@"SecureStore – commands:
-  add <label> <plaintext>   Encrypt and store a secret
+  add <label> <plaintext>   Encrypt and store a secret (packed into encrypted_data)
   get <id>                   Decrypt and display a secret
   list                       List entries (id, label, timestamp)
   delete <id>                Delete an entry
