@@ -101,35 +101,4 @@ SELECT last_insert_rowid();";
         cmd.Parameters.AddWithValue("$id", id);
         return cmd.ExecuteNonQuery();
     }
-
-    // --- Tamper helper for integrity demo: flips the first byte of ciphertext
-    public bool TamperCiphertextFirstByte(long id)
-    {
-        using var conn = new SqliteConnection(_connectionString);
-        conn.Open();
-
-        // Read ciphertext
-        byte[]? ct = null;
-        using (var read = conn.CreateCommand())
-        {
-            read.CommandText = "SELECT ciphertext FROM entries WHERE id = $id";
-            read.Parameters.AddWithValue("$id", id);
-            using var r = read.ExecuteReader();
-            if (r.Read())
-                ct = (byte[])r[0];
-            else
-                return false;
-        }
-        if (ct is null || ct.Length == 0) return false;
-
-        // Flip one byte
-        ct[0] ^= 0xFF;
-
-        // Write back
-        using var update = conn.CreateCommand();
-        update.CommandText = "UPDATE entries SET ciphertext = $ct WHERE id = $id";
-        update.Parameters.AddWithValue("$ct", ct);
-        update.Parameters.AddWithValue("$id", id);
-        return update.ExecuteNonQuery() == 1;
-    }
 }

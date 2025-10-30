@@ -77,16 +77,6 @@ try
             Console.WriteLine(affected == 0 ? "Not found." : "Deleted.");
             break;
 
-        case "tamper":
-            if (args.Length != 2 || !long.TryParse(args[1], out long tamperId))
-            {
-                Console.WriteLine("Usage: tamper <id>");
-                return;
-            }
-            bool ok = db.TamperCiphertextFirstByte(tamperId);
-            Console.WriteLine(ok ? "Ciphertext modified." : "Not found or empty.");
-            break;
-
         default:
             PrintHelp();
             break;
@@ -106,6 +96,5 @@ static void PrintHelp()
   get <id>                   Decrypt and display a secret
   list                       List entries (id, label, timestamp)
   delete <id>                Delete an entry
-  tamper <id>                Flip a byte in ciphertext (integrity demo)
 ");
 }
