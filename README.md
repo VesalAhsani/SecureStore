@@ -25,3 +25,8 @@ dotnet run -- get 1
 - Parameterized SQL to prevent injection.
 - Sensitive buffers are zeroed where practical.
 - The DPAPI-protected key blob lives at %AppData%\SecureStore\appkey.dpapi.
+## Integrity demo
+1) dotnet run -- add note "attack me"
+2) dotnet run -- list  (note the id)
+3) dotnet run -- tamper <id>
+4) dotnet run -- get <id>  # should show 'Decryption error'
