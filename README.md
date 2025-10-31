@@ -31,16 +31,18 @@ dotnet run -- get 1
 3) dotnet run -- tamper <id>
 4) dotnet run -- get <id>  # should show 'Decryption error'
 
-## Evaluator Steps (Windows)
+Evaluator Steps (Windows)
 
-> One-time prerequisites (Windows 10/11)
-```powershell
+One-time prerequisites (Windows 10/11)
+
 winget install Microsoft.DotNet.SDK.8
 winget install Git.Git
 # Optional (for DB inspection)
 winget install SQLite.sqlite
 
+
 Clone & build
+
 git clone https://github.com/VesalAhsani/SecureStore.git
 cd SecureStore
 dotnet build -c Release
@@ -86,4 +88,3 @@ Publish & run the EXE (optional)
 
 dotnet publish -c Release -r win-x64 --self-contained false
 .\bin\Release\net8.0-windows\win-x64\publish\SecureStore.exe list
-
