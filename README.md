@@ -16,9 +16,9 @@ dotnet run -- list
 dotnet run -- get 1
 ```
 ## How it works
-- Key mgmt: Security/KeyStore.cs uses Windows DPAPI via ProtectedData to protect a 32-byte AES key.
-- Encryption: Security/CryptoService.cs uses AES-GCM. data_label is AAD for integrity.
-- Database: Data/DatabaseService.cs writes only nonce / tag / ciphertext to SQLite.
+- Key mgmt: `Security/KeyStore.cs` uses Windows DPAPI via ProtectedData to protect a 32-byte AES key.
+- Encryption: `Security/CryptoService.cs` uses AES-GCM. data_label is AAD for integrity.
+- Database: `Data/DatabaseService.cs` writes only nonce / tag / ciphertext to SQLite.
 - CLI: Program.cs supports add, get, list, delete.
 
 ## Security notes
