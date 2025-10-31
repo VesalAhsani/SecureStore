@@ -8,12 +8,13 @@ The AES-256 key is generated once and saved only as a DPAPI-protected blob (Curr
 - .NET 8 SDK
 
 ## Build & Run
+```
 dotnet restore
 dotnet build -c Release
 dotnet run -- add password "my super secret"
 dotnet run -- list
 dotnet run -- get 1
-
+```
 ## How it works
 - Key mgmt: Security/KeyStore.cs uses Windows DPAPI via ProtectedData to protect a 32-byte AES key.
 - Encryption: Security/CryptoService.cs uses AES-GCM. data_label is AAD for integrity.
