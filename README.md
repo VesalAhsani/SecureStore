@@ -16,16 +16,16 @@ dotnet run -- list
 dotnet run -- get 1
 ```
 ## How it works
-- Key mgmt: `Security/KeyStore.cs` uses Windows DPAPI via ProtectedData to protect a 32-byte AES key.
-- Encryption: `Security/CryptoService.cs` uses AES-GCM. data_label is AAD for integrity.
+- Key mgmt: `Security/KeyStore.cs` uses Windows DPAPI via `ProtectedData` to protect a 32-byte AES key.
+- Encryption: `Security/CryptoService.cs` uses AES-GCM. `data_label` is AAD for integrity.
 - Database: `Data/DatabaseService.cs` writes only nonce / tag / ciphertext to SQLite.
-- CLI: Program.cs supports add, get, list, delete.
+- CLI: `Program.cs` supports `add`, `get`, `list`, `delete`.
 
 ## Security notes
 - Unique 12-byte nonce per record; 16-byte auth tag.
 - Parameterized SQL to prevent injection.
 - Sensitive buffers are zeroed where practical.
-- The DPAPI-protected key blob lives at %AppData%\SecureStore\appkey.dpapi.
+- The DPAPI-protected key blob lives at `%AppData%\SecureStore\appkey.dpapi`.
 
 ## Integrity demo
 1) dotnet run -- add note "attack me"
@@ -62,7 +62,7 @@ dotnet run -- list                         # expect: 1  password  <UTC time>
 dotnet run -- get 1                        # expect: Label: password / Plaintext: hello world
 ```
 
-Exact schema (single encrypted_data BLOB)
+Exact schema (single `encrypted_data` BLOB)
 ```
 sqlite3 "$env:APPDATA\SecureStore\securestore.db" ".schema entries"
 ```
