@@ -40,8 +40,8 @@ winget install Git.Git
 # Optional (for DB inspection)
 winget install SQLite.sqlite
 
-Clone & build
-
+> Clone & build
+```powershell
 git clone https://github.com/VesalAhsani/SecureStore.git
 cd SecureStore
 dotnet build -c Release
