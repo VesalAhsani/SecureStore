@@ -88,3 +88,9 @@ Publish & run the EXE (optional)
 
 dotnet publish -c Release -r win-x64 --self-contained false
 .\bin\Release\net8.0-windows\win-x64\publish\SecureStore.exe list
+
+winget install Microsoft.DotNet.SDK.8
+winget install Git.Git
+# Optional (for DB inspection)
+winget install SQLite.sqlite
+
