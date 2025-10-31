@@ -34,19 +34,19 @@ dotnet run -- get 1
 Evaluator Steps (Windows)
 
 One-time prerequisites (Windows 10/11)
-
+```
 winget install Microsoft.DotNet.SDK.8
 winget install Git.Git
 # Optional (for DB inspection)
 winget install SQLite.sqlite
-
+```
 
 Clone & build
-
+```
 git clone https://github.com/VesalAhsani/SecureStore.git
 cd SecureStore
 dotnet build -c Release
-
+```
 
 Clean slate (so first insert is id=1)
 
